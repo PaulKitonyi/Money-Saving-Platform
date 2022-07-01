@@ -1,0 +1,22 @@
+{
+  "name": "money-saving-platform",
+  "version": "1.0.0",
+  "description": "This is a money saving platform implemented in nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulKitonyi/Money-Saving-Platform.git"
+  },
+  "author": "Paul Kitonyi (paulmucimah@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulKitonyi/Money-Saving-Platform/issues"
+  },
+  "homepage": "https://github.com/PaulKitonyi/Money-Saving-Platform#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
