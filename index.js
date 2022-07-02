@@ -17,6 +17,7 @@ mongoose
 app.use(express.json());
 app.use('/api/create-account', accounts);
 app.use('/api/save/:accountId', savings);
+app.use('/api/savings', savings);
 
 const port = process.env.PORT || 3000;
 app.listen(port, console.log(`Server running on port ${port}`));

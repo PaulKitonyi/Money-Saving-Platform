@@ -2,6 +2,7 @@ const { Saving, validate } = require('../models/saving');
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
+const { paginatedResults } = require('../lib/pagination');
 const today = new Date().toISOString().split('T')[0];
 
 router.post('/', async (req, res) => {
@@ -12,6 +13,10 @@ router.post('/', async (req, res) => {
   await saving.save();
 
   res.send(saving);
+});
+
+router.get('/', paginatedResults(Saving), async (req, res) => {
+  res.send(res.paginatedResults);
 });
 
 module.exports = router;
