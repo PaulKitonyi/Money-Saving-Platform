@@ -5,13 +5,14 @@ const { Saving, validate } = require('../models/saving');
 
 exports.createSaving = async (req, res) => {
   const accountId = req.params.accountId;
+  const today = new Date().toISOString().slice(0, 10);
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  let savingResult = await Saving.find().and({
+  let savingResult = await Saving.find({
     account: accountId,
-    createdAt: { $eq: Date() },
+    createdAt: { $gte: new Date(today) },
   });
 
   if (savingResult.length !== 0)
