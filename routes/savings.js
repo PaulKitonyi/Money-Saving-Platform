@@ -8,7 +8,7 @@ const {
   exportSavings,
 } = require('../controllers/saving');
 
-router.post('/save', createSaving);
+router.post('/save/:accountId', createSaving);
 router.get('/savings', paginatedResults(Saving), getSavings);
 router.get('/savings/downloadExcel', exportSavings);
 

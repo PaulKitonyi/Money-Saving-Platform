@@ -30,7 +30,6 @@ function validateSaving(saving) {
   const schema = {
     amount: Joi.number().required(),
     description: Joi.string(),
-    account: Joi.objectId().required(),
   };
 
   return Joi.validate(saving, schema);

@@ -1,14 +1,29 @@
 const excelJS = require('exceljs');
 const _ = require('lodash');
+const Joi = require('joi');
 const { Saving, validate } = require('../models/saving');
 
 exports.createSaving = async (req, res) => {
+  const accountId = req.params.accountId;
+
   const { error } = validate(req.body);
   if (error) return res.status(400).send({ error: error.details[0].message });
 
-  let saving = new Saving(
-    _.pick(req.body, ['amount', 'description', 'account'])
-  );
+  let savingResult = await Saving.find().and({
+    account: accountId,
+    createdAt: { $eq: Date() },
+  });
+
+  if (savingResult.length !== 0)
+    return res
+      .status(400)
+      .send("You have already saved today.You can't save twice.");
+
+  let saving = new Saving({
+    amount: req.body.amount,
+    description: req.body.description,
+    account: accountId,
+  });
 
   await saving.save();
 
@@ -20,9 +35,16 @@ exports.getSavings = async (req, res) => {
 };
 
 exports.exportSavings = async (req, res) => {
+  const { startDate, endDate } = req.body;
+
+  const { error } = validateDateRange(req.body);
+  if (error) return res.status(400).send({ error: error.details[0].message });
+
   const dateNow = Date.now();
 
-  let savings = await Saving.find();
+  let savings = await Saving.find({
+    createdAt: { $gte: startDate, $lt: endDate },
+  });
 
   const workbook = new excelJS.Workbook();
   const worksheet = workbook.addWorksheet('Savings Report');
@@ -62,6 +84,13 @@ exports.exportSavings = async (req, res) => {
       message: err.message,
     });
   }
-
-  // res.send(savings);
 };
+
+function validateDateRange(dateRange) {
+  const schema = {
+    startDate: Joi.string().required(),
+    endDate: Joi.string().required(),
+  };
+
+  return Joi.validate(dateRange, schema);
+}
